@@ -158,15 +158,95 @@ def index(request):
 from django.shortcuts import render
 from .models import Destination
 from django.db.models import Q
+# from . models import Accommodation
+from django.shortcuts import render
+from django.db.models import Q
+from .models import Destination
+
 def search_destinations(request):
-    query = request.GET.get('query', '').strip()  # Get user input and strip any extra spaces
-    destinations = None
+    query = request.GET.get('query', '').strip().lower()  # Normalize query
+    destinations = Destination.objects.all()  # Default: Show all destinations
 
     if query:
-        destinations = Destination.objects.filter(
-            Q(location__icontains=query) | Q(name__icontains=query)
+        destinations = destinations.filter(
+            Q(name__icontains=query) |
+            Q(location__icontains=query) |
+            Q(state__icontains=query) |
+            Q(country__icontains=query)
         )
-    else:
-        destinations = None  # or you could display all destinations here, depending on your preference
 
     return render(request, 'search.html', {'destinations': destinations, 'query': query})
+
+from django.shortcuts import render
+from .models import Destination
+
+# def filter_destinations(request):
+#     destinations = Destination.objects.all()
+
+#     # Get filter values from the request
+#     tour_type = request.GET.get('tour_type')
+#     accommodation_type = request.GET.get('accommodation_type')
+#     state = request.GET.get('state')
+#     min_price = request.GET.get('min_price')
+#     max_price = request.GET.get('max_price')
+
+#     # Apply filters
+#     if tour_type:
+#         destinations = destinations.filter(tour_type=tour_type)
+
+#     if accommodation_type:
+#         destinations = destinations.filter(accommodation_type=accommodation_type)
+
+#     if state:
+#         destinations = destinations.filter(state__icontains=state)
+
+#     if min_price and max_price:
+#         destinations = destinations.filter(price__gte=min_price, price__lte=max_price)
+
+#     return render(request, 'recomm.html', {'destinations': destinations})
+from django.shortcuts import render
+from .models import Destination
+from django.shortcuts import render
+from .models import Destination
+
+def filter_destinations(request):
+    destinations = None  # Initially no results
+
+    # Get filter values from request
+    tour_type = request.GET.get('tour_type')
+    accommodation_type = request.GET.get('accommodation_type')
+    state = request.GET.get('state')
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    max_days = request.GET.get('max_days')  # Keep only max_days
+    interest = request.GET.get('interest')
+    min_distance = request.GET.get('min_distance')
+    max_distance = request.GET.get('max_distance')
+
+    # Check if any filter is applied
+    if any([tour_type, accommodation_type, state, min_price, max_price, max_days, interest, min_distance, max_distance]):
+        destinations = Destination.objects.all()
+
+        # Apply filters
+        if tour_type:
+            destinations = destinations.filter(tour_type=tour_type)
+
+        if accommodation_type:
+            destinations = destinations.filter(accommodation_type=accommodation_type)
+
+        if state:
+            destinations = destinations.filter(state__icontains=state)
+
+        if min_price and max_price:
+            destinations = destinations.filter(price__gte=min_price, price__lte=max_price)
+
+        if max_days:
+            destinations = destinations.filter(duration__lte=max_days)
+
+        if interest:
+            destinations = destinations.filter(interest__icontains=interest)
+
+        if min_distance and max_distance:
+            destinations = destinations.filter(distance__gte=min_distance, distance__lte=max_distance)
+
+    return render(request, 'recomm.html', {'destinations': destinations})

@@ -40,7 +40,6 @@ from django.db import models
 #     def __str__(self):
 #         return f"{self.tour_type} to {self.destination}"
 
-
 from django.db import models
 
 class Destination(models.Model):
@@ -53,6 +52,7 @@ class Destination(models.Model):
         ('Honeymoon', 'Honeymoon'),
         ('Adventure', 'Adventure'),
     ]
+
     ACCOMMODATION_TYPES = [
         ('Hotel', 'Hotel'),
         ('Resort', 'Resort'),
@@ -79,4 +79,7 @@ class Destination(models.Model):
 
     def __str__(self):
         return f"{self.name} in {self.location}"
+
+
+
 

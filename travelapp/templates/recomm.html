@@ -1,0 +1,138 @@
+{% load static %}
+{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Destination Filter</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    {% comment %} <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet"> {% endcomment %}
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Stylesheet -->
+    <link href="{% static 'bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+      <!-- Hero Section -->
+      <div class="container-fluid bg-primary py-5 mb-5 hero-header">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <h1 class="display-3 text-white">Destination Filter</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item text-white active">Filter</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container my-5">
+        <h3 class="mb-4">Filter Destinations</h3>
+        <form method="GET">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label for="tourType" class="form-label">Tour Type</label>
+                    <select class="form-select" id="tourType" name="tour_type">
+                        <option value="">All</option>
+                        <option value="Romantic">Romantic</option>
+                        <option value="Solo">Solo</option>
+                        <option value="Family">Family</option>
+                        <option value="Friends">Friends</option>
+                        <option value="Business Trip">Business Trip</option>
+                        <option value="Honeymoon">Honeymoon</option>
+                        <option value="Adventure">Adventure</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="accommodationType" class="form-label">Accommodation Type</label>
+                    <select class="form-select" id="accommodationType" name="accommodation_type">
+                        <option value="">All</option>
+                        <option value="Hotel">Hotel</option>
+                        <option value="Resort">Resort</option>
+                        <option value="Apartment">Apartment</option>
+                        <option value="Campsite">Campsite</option>
+                        <option value="Guesthouse">Guesthouse</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="state" class="form-label">State</label>
+                    <input type="text" class="form-control" id="state" name="state" placeholder="Enter state">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="minPrice" class="form-label">Min Price ($)</label>
+                    <input type="number" class="form-control" id="minPrice" name="min_price" placeholder="Min price">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="maxPrice" class="form-label">Max Price ($)</label>
+                    <input type="number" class="form-control" id="maxPrice" name="max_price" placeholder="Max price">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="maxDays" class="form-label">Max Days</label>
+                    <input type="number" class="form-control" id="maxDays" name="max_days" placeholder="Max days">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="interest" class="form-label">Interest</label>
+                    <input type="text" class="form-control" id="interest" name="interest" placeholder="E.g., Hiking, Beaches">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="minDistance" class="form-label">Min Distance (km)</label>
+                    <input type="number" class="form-control" id="minDistance" name="min_distance" placeholder="Min distance">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="maxDistance" class="form-label">Max Distance (km)</label>
+                    <input type="number" class="form-control" id="maxDistance" name="max_distance" placeholder="Max distance">
+                </div>
+
+                <div class="col-md-12 text-end">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Display Filtered Destinations -->
+    <div class="container my-5">
+        <h3 class="mb-4">Recommended Destinations</h3>
+        <div class="row g-4">
+            {% if destinations %}
+                {% for dest in destinations %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card shadow-sm">
+                            <img class="card-img-top" src="{{ dest.img.url }}" alt="{{ dest.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ dest.name }}</h5>
+                                <p class="card-text"><strong>Location:</strong> {{ dest.state }}, {{ dest.country }}</p>
+                                <p class="card-text"><strong>Type:</strong> {{ dest.accommodation_type }}</p>
+                                <p class="card-text"><strong>Tour Type:</strong> {{ dest.tour_type }}</p>
+                                <p class="card-text"><strong>Interest:</strong> {{ dest.interest }}</p>
+                                <p class="card-text"><strong>Price:</strong> ${{ dest.price }}</p>
+                                <p class="card-text"><strong>Duration:</strong> {{ dest.duration }} days</p>
+                                <p class="card-text"><strong>Distance:</strong> {{ dest.distance }} km</p>
+                                <p class="card-text">{{ dest.description }}</p>
+                                <a href="#" class="btn btn-sm btn-primary">Explore</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No destinations match your preferences. Try adjusting your filters.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

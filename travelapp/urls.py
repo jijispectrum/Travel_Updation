@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import search_destinations
+from .views import search_destinations,filter_destinations
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -22,5 +22,6 @@ urlpatterns = [
     path('package/', views.package, name='package'),
     # path('filter/', views.filter_tours, name='filter_tours'),
     path('search/', search_destinations, name='search_destinations'),
-    
+    path('recom/', filter_destinations, name='filter_destinations'),
+   
 ]
